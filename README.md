@@ -15,10 +15,12 @@ This repository contains a simple, lightweight Python simulation of an accumulat
 ARC/
 ├── asm/                    # Assembly source files (.asm)
 │   ├── addition.asm        # Demo addition program
-│   └── counter.asm         # Demo countdown loop program
+│   ├── counter.asm         # Demo countdown loop program
+│   └── interactive.asm     # Interactive addition calculator
 ├── programs/               # Compiled machine-code files (.arc)
 │   ├── addition.arc
-│   └── counter.arc
+│   ├── counter.arc
+│   └── interactive.arc
 ├── assembler.py            # Compiles .asm files to .arc files
 ├── cpu.py                  # Implements the CPU execution cycle and registers
 ├── main.py                 # Main entry point to load and run programs
@@ -48,6 +50,8 @@ The CPU executes instructions using a three-digit decimal format: `OAA`. The hun
 | `4` | `SUB` | `4AA` | Subtracts the value at memory address `AA` from the Accumulator. |
 | `5` | `JZ` | `5AA` | Jumps to instruction address `AA` if the Accumulator is equal to `0`. |
 | `6` | `JUMP` | `6AA` | Jumps unconditionally to instruction address `AA`. |
+| `7` | `INP` | `7AA` | Prompts user input and stores the integer value into memory address `AA`. |
+| `8` | `OUT` | `8AA` | Prints the value stored at memory address `AA` to the output screen. |
 | `9` | `HALT` | `900` | Shuts down the CPU. |
 
 ### Assembler Directives
@@ -69,6 +73,7 @@ python assembler.py
 ```text
 Successfully assembled: addition.asm -> addition.arc
 Successfully assembled: counter.asm -> counter.arc
+Successfully assembled: interactive.asm -> interactive.arc
 ```
 
 ### 2. Run the CPU Simulator
@@ -83,6 +88,7 @@ Upon running, choose a program from the menu. The simulator will log the instruc
 Available ARC programs:
 [1] addition.arc
 [2] counter.arc
+[3] interactive.arc
 
 Select a program to run (Enter Number): 1
 FETCH: PC=[0] -> Instruction 104

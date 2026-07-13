@@ -46,6 +46,21 @@ class CPU:
             self.pc = operand
             print(f"EXEC:   JUMP unconditionally to address {operand}")
 
+        elif opcode == 7: # INP
+            while True:
+                try:
+                    user_input = int(input(f"\n[CPU] Enter a number to store at address {operand}: "))
+                    self.memory.write(operand, user_input)
+                    print(f"EXEC:   INP - Stored user input ({user_input}) into address {operand}")
+                    break
+                except ValueError:
+                    print("ERROR: Please enter a valid integer.")
+            
+        elif opcode == 8: # OUT
+            value = self.memory.read(operand)
+            print(f"{value}")
+            print(f"EXEC:   OUT - Printed value {value} from address {operand}")
+
         elif opcode == 9: # HALT
             self.running = False
             print("EXEC:    HALT. Shutting down CPU.")

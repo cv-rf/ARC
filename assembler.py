@@ -8,7 +8,9 @@ OPCODES = {
     "STORE": 3,
     "SUB": 4,
     "JZ": 5,
-    "JUMP": 6
+    "JUMP": 6,
+    "INP": 7,
+    "OUT": 8
 }
 
 def assemble(asm_filepath, arc_filepath):
