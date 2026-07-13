@@ -1,9 +1,12 @@
-; A countdown loop program
-LOAD 06     ; Start of loop: Load the counter
-JZ 05       ; If ACC is 0, jump to HALT (address 05)
-SUB 07      ; Subtract 1
-STORE 06    ; Save the updated counter
-JUMP 00     ; Jump back to the start of the loop
-HALT        ; Stop execution
-DAT 3       ; Address 06: The counter value
-DAT 1       ; Address 07: The decrement value 
+; A countdown loop program using labels and variables
+start:    LOAD counter  ; Load the counter
+          JZ end        ; If it hits 0, jump to the end
+          SUB step      ; Subtract our step value
+          STORE counter ; Save it back to memory
+          JUMP start    ; Jump back to the top of the loop
+
+end:      HALT
+
+; Variables Data Section
+counter:  DAT 3
+step:     DAT 1

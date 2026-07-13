@@ -12,37 +12,59 @@ OPCODES = {
 }
 
 def assemble(asm_filepath, arc_filepath):
-    machine_code = []
+    symbol_table = {}
+    processed_lines = []
 
+    current_address = 0
     with open(asm_filepath, 'r') as file:
         for line in file:
             line = line.split(';')[0].strip()
             if not line:
                 continue
-
+        
             parts = line.split()
-            command = parts[0].upper()
 
-            if command == "HALT":
-                machine_code.append("900")
+            if parts[0].endswith(':'):
+                label_name = parts[0][:-1]
+                symbol_table[label_name] = current_address
+                parts = parts[1:]
 
-            elif command == "DAT":
-                value = int(parts[1])
-                machine_code.append(f"{value:03}")
+            if parts:
+                processed_lines.append(parts)
+                current_address += 1
 
-            elif command in OPCODES:
-                opcode = OPCODES[command]
-                operand = int(parts[1])
-                machine_code.append(f"{opcode}{operand:02}")
+    machine_code = []
+    for parts in processed_lines:
+        command = parts[0].upper()
 
+        if command == "HALT":
+            machine_code.append("900")
+        
+        elif command == "DAT":
+            value = int(parts[1])
+            machine_code.append(f"{value:03}")
+
+        elif command in OPCODES:
+            opcode = OPCODES[command]
+            raw_operand = parts[1]
+
+            if raw_operand in symbol_table:
+                operand = symbol_table[raw_operand]
             else:
-                print(f"ERROR: Unknown command '{command}' in {asm_filepath}")
-                return
+                operand = int(raw_operand)
+
+            machine_code.append(f"{opcode}{operand:02}")
+
+        else:
+            print(f"ERROR: Unknown command '{command}' in {asm_filepath}")
+            return
+        
     with open(arc_filepath, 'w') as file:
         for code in machine_code:
             file.write(code + '\n')
-
+        
     print(f"Successfully assembled: {os.path.basename(asm_filepath)} -> {os.path.basename(arc_filepath)}")
+             
 
 def main():
     asm_dir = "asm"
