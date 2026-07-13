@@ -24,11 +24,27 @@ class CPU:
         elif opcode == 2: # ADD
             value = self.memory.read(operand)
             self.acc += value
-            print(f"EXEC:   ADD value {value} from address {operand} to ACC. (ACC is now {self.acc})")
+            print(f"EXEC:   ADD value {value} from address {operand} to ACC (ACC is now {self.acc})")
 
         elif opcode == 3: # STORE
             self.memory.write(operand, self.acc)
             print(f"EXEC:   STORE ACC ({self.acc}) into address {operand}")
+
+        elif opcode == 4: # SUBTRACT
+            value = self.memory.read(operand)
+            self.acc -= value
+            print(f"EXEC:   SUBTRACT value {value} from address {operand} (ACC is now {self.acc})")
+        
+        elif opcode == 5: # JUMP_IF_ZERO
+            if self.acc == 0:
+                self.pc = operand
+                print(f"EXEC:   JUMP_IF_ZERO triggered. Moving PC to address {operand}")
+            else:
+                print(f"EXEC:   JUMP_IF_ZERO ignored (ACC is {self.acc})")
+
+        elif opcode == 6: # JUMP
+            self.pc = operand
+            print(f"EXEC:   JUMP unconditionally to address {operand}")
 
         elif opcode == 9: # HALT
             self.running = False
