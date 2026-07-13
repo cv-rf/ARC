@@ -5,6 +5,7 @@ class CPU:
         self.memory = memory
         self.pc = 0
         self.acc = 0
+        self.sp = 99
         self.running = False
 
     def fetch(self):
@@ -64,6 +65,27 @@ class CPU:
         elif opcode == 9: # HALT
             self.running = False
             print("EXEC:    HALT. Shutting down CPU.")
+
+        elif opcode == 10: # CALL
+            self.memory.write(self.sp, self.pc)
+            self.sp -= 1
+            self.pc = operand
+            print(f"EXEC:   CALL address {operand}. Saved return addredd {self.pc} to stack.")
+
+        elif opcode == 11: # RET
+            self.sp += 1
+            self.pc = self.memory.read(self.sp)
+            print(f"EXEC:   RET triggered. Returning address {self.pc}")
+
+        elif opcode == 12: # PUSH
+            self.memory.write(self.sp, self.acc)
+            self.sp -= 1
+            print(f"EXEC:   PUSH ACC ({self.acc}) to stack.")
+
+        elif opcode == 13: # POP
+            self.sp += 1
+            self.acc = self.memory.read(self.sp)
+            print(f"EXEC:   POP stack into ACC. (ACC is now {self.acc})")
 
         else:
             print(f"ERROR: Unknown opcode: {opcode}! Halting.")

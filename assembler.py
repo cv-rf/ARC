@@ -10,7 +10,11 @@ OPCODES = {
     "JZ": 5,
     "JUMP": 6,
     "INP": 7,
-    "OUT": 8
+    "OUT": 8,
+    "CALL": 10,
+    "RET": 11,
+    "PUSH": 12,
+    "POP": 13
 }
 
 def assemble(asm_filepath, arc_filepath):
@@ -48,12 +52,16 @@ def assemble(asm_filepath, arc_filepath):
 
         elif command in OPCODES:
             opcode = OPCODES[command]
-            raw_operand = parts[1]
 
-            if raw_operand in symbol_table:
-                operand = symbol_table[raw_operand]
+            if command in ["RET", "PUSH", "POP"]:
+                operand = 0
             else:
-                operand = int(raw_operand)
+                raw_operand = parts[1]
+
+                if raw_operand in symbol_table:
+                    operand = symbol_table[raw_operand]
+                else:
+                    operand = int(raw_operand)
 
             machine_code.append(f"{opcode}{operand:02}")
 
